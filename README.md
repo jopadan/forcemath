@@ -1,6 +1,6 @@
 # forcemath
 
-SIMD math library based on @rikusalminen's (threcedee-simd)[http://github.com/rikusalminen/threedee-simd] for OpenGL 3D engine frameworks written in C
+SIMD math library based on @rikusalminen's [threedee-simd](http://github.com/rikusalminen/threedee-simd) for OpenGL 3D engine frameworks written in C
 
 ## Overview
 	
