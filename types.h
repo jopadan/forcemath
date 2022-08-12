@@ -17,6 +17,27 @@ typedef float scalar;
 #endif
 #define SCALAR_SUFFIX s
 
+/* integer vector types */
+typedef int32_t vec2i32 __attribute__((vector_size( sizeof(int32_t) * 2)));
+typedef int32_t vec3i32[3];
+typedef int32_t vec4i32 __attribute__((vector_size( sizeof(int32_t) * 4)));
+
+/* quad integer vector types */
+typedef quad_t vec2i64 __attribute__((vector_size( sizeof(quad_t) * 2)));
+typedef quad_t vec3i64[3];
+typedef quad_t vec4i64 __attribute__((vector_size( sizeof(quad_t) * 4)));
+
+/* integer vector types */
+#if defined(__QUAD_INTEGER_SCALAR__)
+typedef vec2i vec2i64;
+typedef vec3i vec3i64;
+typedef vec4i vec4i64;
+#else
+typedef vec2i vec2i32;
+typedef vec3i vec3i32;
+typedef vec4i vec4i32;
+#endif
+
 /* single precision vector types */
 typedef float vec2f   __attribute__((vector_size( sizeof(float) * 2 )));
 typedef float vec3f[3];
