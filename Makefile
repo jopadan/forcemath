@@ -1,10 +1,16 @@
 PROGRAM=forcemath
-GCC ?= gcc
+CC ?= gcc
+CXX ?= g++
 INSTALL ?= install
 RM ?= rm
 PREFIX ?= /usr/local
 BINDIR ?= bin
-CFLAGS ?= -march=native -mfpmath=sse+387 -O2 -pipe
+CFLAGS ?= -std=gnu2x
+CXXFLAGS ?= -std=gnu++23
+OPTFLAGS ?= -march=native -mfpmath=sse+387 -O3 -pipe
+CFLAGS += $(OPTFLAGS)
+CXXFLAGS += $(OPTFLAGS)
+SUBDIRS ?= ilogxi
 
 ifdef _WIN32
 OBJECT_EXT ?= .obj
@@ -14,19 +20,24 @@ OBJECT_EXT ?= .o
 EXECUTABLE_EXT ?= 
 endif
 
-all: $(PROGRAM)
+all: $(PROGRAM) $(SUBDIRS)
 
-tolower: $(PROGRAM)$(OBJECT_EXT)
-	$(GCC) $(CFLAGS) -lm -o $(PROGRAM) $(PROGRAM)$(OBJECT_EXT)
+$(SUBDIRS):
+	$(MAKE) -C $(SUBDIRS)
 
-tolower$(OBJECT_EXT): $(PROGRAM).c
-	$(GCC) $(CFLAGS) -c $(PROGRAM).c
+$(PROGRAM): $(PROGRAM)$(OBJECT_EXT)
+	$(CXX) $(CXXFLAGS) -lm -o $(PROGRAM) $(PROGRAM)$(OBJECT_EXT)
+
+$(PROGRAM)$(OBJECT_EXT): $(PROGRAM).c
+	$(CXX) $(CXXFLAGS) -c $(PROGRAM).c
 clean:
 	$(RM) -rf $(PROGRAM)$(OBJECT_EXT) $(PROGRAM)$(EXECUTABLE_EXT)
+	$(MAKE) -C $(SUBDIRS) clean
 
 install: $(PROGRAM)
 	$(INSTALL) -d $(PREFIX)/$(BINDIR)
 	$(INSTALL) -m 755 $(PROGRAM)$(EXECUTABLE_EXT) $(PREFIX)/$(BINDIR)
+	$(MAKE) -C $(SUBDIRS) install
 
 uninstall: $(PROGRAM)
 	$(RM) -rf $(PREFIX)/$(BINDIR)/$(PROGRAM)$(EXECUTABLE_EXT)
